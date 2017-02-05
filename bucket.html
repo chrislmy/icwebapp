@@ -42,12 +42,22 @@
 <script>
 	// Global host name
 	console.log(document.cookie);
-	var host_name = "http://9c1a3ec5.ngrok.io/";
+	var host_name = "http://localhost:3000/";
 	// Initialize pusher
 	var pusher = new Pusher('31932a4df70b512824e3', {
       cluster: 'eu',
       encrypted: true
     });
+
+    var raw_cookie = document.cookie;
+
+	console.log(raw_cookie);
+
+	var index = raw_cookie.lastIndexOf("bucket_key=");
+	index += 11;
+
+	var bucket_key = raw_cookie.substring(index, index + 36);
+
 	
 	var global_files = [];	
 	var channel = pusher.subscribe('ICStrangers');
@@ -280,7 +290,7 @@
 					// ajax request to submit form data
 					$.ajax(
 					{
-						url: 			$form.attr( 'action' ),
+						url: 			host_name + "bucket/" + bucket_key + "/add",
 						type:			'POST',
 						data: 			ajaxData,
 						//dataType:		'json',
