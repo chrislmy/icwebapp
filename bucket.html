@@ -48,7 +48,8 @@
       cluster: 'eu',
       encrypted: true
     });
-
+	
+	var global_files = [];	
 	var channel = pusher.subscribe('ICStrangers');
 
 	// channel.bind("on_connection" , function(data){
@@ -71,7 +72,8 @@
 		//compare bucket_key to cookie
 		// if (bucket_key == data.bucket_key) {
 			//send file data to function to show code
-			showFiles(data.files);
+			global_files = data.files;
+			renderGlobalFiles();
 			console.log(data.files);
 
 		// }
@@ -103,6 +105,39 @@
 
 	});
 
+
+	function renderGlobalFiles() {
+		$('.file-display-section').html("");
+
+		for (var i = 0; i<global_files.length; i++) {
+
+			var fileName = global_files[i].name;
+			var extension = global_files[i].name.split('.').pop().toLowerCase();
+			if(extension == "pdf"){
+	            $('.file-display-section').append("<div class='col-md-4'>" + '<img class="file-thumbnail" src="img/pdf_logo.png">'+ '</img><br>' + "<a style='cursor:pointer;'>" + fileName + '</a></div>'); 
+			}
+			else if(extension == 'pptx'){
+		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/ppt_logo.png">'+ '</img><br>' + fileName + '</div>') 
+			}
+			else if(extension == 'xls' || extension == 'xlsx' || extension == 'xlsb'){
+		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/xls_logo.png">'+ '</img><br>' + fileName + '</div>') 
+			}
+			else if(extension == 'doc' || extension == 'docx'){
+		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/word_logo.jpg">'+ '</img><br>' + fileName + '</div>'); 
+			}else{//edge case get from server see if path works
+		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/word_logo.jpg">'+ '</img><br>' + fileName + '</div>'); 
+			}
+
+
+
+
+		}
+
+
+
+
+
+	}
 
 	// Function to get files from api
 	function getData(){
@@ -205,6 +240,7 @@
 					// 	arrayFiles.push(file);
 					// });
 					console.log(droppedFiles);
+					renderGlobalFiles();
 					showFiles( droppedFiles );
 					$form.submit();	
 				});
