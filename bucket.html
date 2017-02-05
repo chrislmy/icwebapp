@@ -40,6 +40,8 @@
 </body>
 
 <script>
+	// Global host name
+	var host_name = "http://9c1a3ec5.ngrok.io/";
 	// Initialize pusher
 	var pusher = new Pusher('31932a4df70b512824e3', {
       cluster: 'eu',
@@ -224,7 +226,7 @@
 							//console.log(data.success);
 							//if( !data.success ) $errorMsg.text( data.error );
 							//alert("File Uploaded!");
-							$form.addClass('is-success');
+							//$form.addClass('is-success');
 
 						},
 						error: function()
