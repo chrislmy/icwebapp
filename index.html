@@ -72,10 +72,10 @@ $( document ).ready(function() {
 
 	channel.bind("on_connection" , function(data){
 		console.log(data);
-		if (data.destination_key == user_key) {
+		// if (data.destination_key == user_key) {
 			document.cookie = "bucket_key=" + data.bucket_key;
 			window.location.replace("bucket.html");
-		}
+		// }
 	});
 	// channel.bind("bucket_updated" , function(data){
 	// 	console.log("Update Bucket Notified");

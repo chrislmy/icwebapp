@@ -58,15 +58,48 @@
 
 	channel.bind("bucket_updated" , function(data){
 		console.log("Bucket Updated");
+		//get bucket_key from cookie
+		var raw_cookie = document.cookie;
+
+		console.log(raw_cookie);
+
+		var index = raw_cookie.lastIndexOf("bucket_key=");
+		index += 11;
+
+		var bucket_key = raw_cookie.substring(index, index + 36);
+
+		//compare bucket_key to cookie
+		// if (bucket_key == data.bucket_key) {
+			//send file data to function to show code
+			showFiles(data.files);
+			console.log(data.files);
+
+		// }
+
+
 		//ajax request to get files
 
 
 	});
 	channel.bind("bucket_destroyed" , function(data){
-		console.log("Destroy Bucket Notified");
 		//destroys bucket key and redirects back to index
-		document.cookie = "bucket_key=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
-		window.location.replace("./");
+		console.log("Destroy Bucket Notified");
+
+		//get bucket_id from cookies
+		var raw_cookie = document.cookie;
+
+		console.log(raw_cookie);
+
+		var index = raw_cookie.lastIndexOf("bucket_key=");
+		index += 11;
+
+		var bucket_key = raw_cookie.substring(index, index + 36);
+		console.log(bucket_key);
+
+		if (bucket_key == data.bucket_key) {
+			document.cookie = "bucket_key=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+			window.location.replace("./");
+		}
 
 	});
 
