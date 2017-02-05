@@ -85,6 +85,29 @@
 	// 	window.location.replace("bucket.html");
 	// });
 
+	channel.bind("on_disconnect" , function(data){
+		//destroys bucket key and redirects back to index
+		console.log("disconnect");
+
+		//get bucket_id from cookies
+		var raw_cookie = document.cookie;
+
+		console.log(raw_cookie);
+
+		var index = raw_cookie.lastIndexOf("user_key=");
+		index += 11;
+
+		var user_key = raw_cookie.substring(index, index + 36);
+		console.log(bucket_key);
+
+		if (user_key == data.destination_key) {
+			document.cookie = "bucket_key=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+			window.location.replace("./");
+		}
+
+	});
+
+
 	channel.bind("bucket_updated" , function(data){
 		console.log("Bucket Updated");
 		//get bucket_key from cookie
