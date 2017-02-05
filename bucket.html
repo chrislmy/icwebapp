@@ -40,6 +40,8 @@
 </body>
 
 <script>
+
+	
 	// Global host name
 	console.log(document.cookie);
 	var host_name = "http://localhost:3000/";
@@ -61,6 +63,22 @@
 	
 	var global_files = [];	
 	var channel = pusher.subscribe('ICStrangers');
+
+
+	$( document ).ready(function() {
+		$.ajax({
+		url: 			host_name + 'bucket/' + bucket_key + "/list-contents",
+		type:			'GET',
+		dataType:		'json',
+		// cache:			false,
+		// contentType:	false,
+		// processData:	false,
+		success: function( data ){
+		}
+	});
+	});
+
+
 
 	// channel.bind("on_connection" , function(data){
 	// 	console.log("Connection Notification");
@@ -124,18 +142,22 @@
 			var fileName = global_files[i].name;
 			var extension = global_files[i].name.split('.').pop().toLowerCase();
 			if(extension == "pdf"){
-	            $('.file-display-section').append("<div class='col-md-4'>" + '<img class="file-thumbnail" src="img/pdf_logo.png">'+ '</img><br>' + "<a style='cursor:pointer;'>" + fileName + '</a></div>'); 
+	            $('.file-display-section').append("<div class='col-md-4'>" + '<img class="file-thumbnail" src="img/pdf_logo.png">'+ '</img><br>' + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>'); 
 			}
 			else if(extension == 'pptx'){
-		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/ppt_logo.png">'+ '</img><br>' + fileName + '</div>') 
+		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/ppt_logo.png">'+ '</img><br>' + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>') 
 			}
 			else if(extension == 'xls' || extension == 'xlsx' || extension == 'xlsb'){
-		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/xls_logo.png">'+ '</img><br>' + fileName + '</div>') 
+		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/xls_logo.png">'+ '</img><br>' + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>') 
 			}
 			else if(extension == 'doc' || extension == 'docx'){
-		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/word_logo.jpg">'+ '</img><br>' + fileName + '</div>'); 
-			}else{//edge case get from server see if path works
-		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/word_logo.jpg">'+ '</img><br>' + fileName + '</div>'); 
+	            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/word_logo.jpg">'+ '</img><br>'  + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>'); 
+	        }
+		    else if (extension == 'png' || extension == 'jpg' || extension == 'jpeg') {
+		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="' + host_name + "user_files/" + bucket_key + "_" + global_files[i].name + '"</img><br>'  + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>'); 
+		    }
+			else{//edge case get from server see if path works
+		            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/question_mark.png">'+ '</img><br>'  + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>'); 
 			}
 
 
@@ -191,34 +213,28 @@
 							console.log(extension);
 							// Handle different filetypes
 							if(extension == "pdf"){
-								return function(e){
-						            $('.file-display-section').append("<div class='col-md-4'>" + '<img class="file-thumbnail" src="img/pdf_logo.png">'+ '</img><br>' + "<a style='cursor:pointer;'>" + fileName + '</a></div>'); 
-					        	};
+	            				$('.file-display-section').append("<div class='col-md-4'>" + '<img class="file-thumbnail" src="img/pdf_logo.png">'+ '</img><br>' + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>'); 
 							}
 							else if(extension == 'pptx'){
-								return function(e){
-						            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/ppt_logo.png">'+ '</img><br>' + fileName + '</div>'); 
-					        	};
+						            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/ppt_logo.png">'+ '</img><br>' + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>') 
 							}
 							else if(extension == 'xls' || extension == 'xlsx' || extension == 'xlsb'){
-								return function(e){
-						            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/xls_logo.png">'+ '</img><br>' + fileName + '</div>'); 
-					        	};
+						            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/xls_logo.png">'+ '</img><br>' + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>') 
 							}
 							else if(extension == 'doc' || extension == 'docx'){
-								return function(e){
-						            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/word_logo.jpg">'+ '</img><br>' + fileName + '</div>'); 
-					        	};
-							}else{
-								return function(e){
-						            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="' + e.target.result + '">'+ '</img><br>' + fileName + '</div>'); 
-					        	};
+					            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/word_logo.jpg">'+ '</img><br>'  + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>'); 
+					        }
+						    else if (extension == 'png' || extension == 'jpg' || extension == 'jpeg') {
+						            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="' + host_name + "user_files/" + bucket_key + "_" + global_files[i].name + '"</img><br>'  + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>'); 
+						    }
+							else{//edge case get from server see if path works
+						            $('.file-display-section').append("<div style='margin-bottom:10px;' class='col-md-4'>" + '<img class="file-thumbnail" src="img/question_mark.png">'+ '</img><br>'  + "<a style='cursor:pointer;' href=" + host_name + "bucket/" + bucket_key + "/get?file_id=" + global_files[i].id + ">" + fileName + '</a></div>'); 
 							}
-					    })(curr_file);
+					})(curr_file);
 					    reader.readAsDataURL(curr_file);
 					}
 					$label.text( files.length > 1 ? ( $input.attr( 'data-multiple-caption' ) || '' ).replace( '{count}', files.length ) : "You added "+ files[ 0 ].name + " to the bucket!" );
-				};
+				}
 
 			// letting the server side to know we are going to make an Ajax request
 			$form.append( '<input type="hidden" name="ajax" value="1" />' );
