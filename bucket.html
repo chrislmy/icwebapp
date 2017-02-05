@@ -41,6 +41,7 @@
 
 <script>
 	// Global host name
+	console.log(document.cookie);
 	var host_name = "http://9c1a3ec5.ngrok.io/";
 	// Initialize pusher
 	var pusher = new Pusher('31932a4df70b512824e3', {
@@ -50,10 +51,11 @@
 
 	var channel = pusher.subscribe('ICStrangers');
 
-	channel.bind("on_connection" , function(data){
-		console.log("Connection Notification");
-		window.location.replace("bucket.html");
-	});
+	// channel.bind("on_connection" , function(data){
+	// 	console.log("Connection Notification");
+	// 	window.location.replace("bucket.html");
+	// });
+
 	channel.bind("bucket_updated" , function(data){
 		console.log("Bucket Updated");
 		//ajax request to get files
@@ -62,6 +64,10 @@
 	});
 	channel.bind("bucket_destroyed" , function(data){
 		console.log("Destroy Bucket Notified");
+		//destroys bucket key and redirects back to index
+		document.cookie = "bucket_key=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+		window.location.replace("./");
+
 	});
 
 

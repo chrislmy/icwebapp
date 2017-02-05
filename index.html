@@ -43,6 +43,7 @@ $( document ).ready(function() {
 			if(data.success == true){
 				console.log(data);
 				user_key = data.user_key;
+				document.cookie = "user_key=" + user_key;
 				console.log(user_key);
 				generateQR(user_key);
 			}
@@ -70,8 +71,11 @@ $( document ).ready(function() {
 	var channel = pusher.subscribe('ICStrangers');
 
 	channel.bind("on_connection" , function(data){
-		console.log("Connection Notification");
-		window.location.replace("bucket.html");
+		console.log(data);
+		if (data.destination_key == user_key) {
+			document.cookie = "bucket_key=" + data.bucket_key;
+			window.location.replace("bucket.html");
+		}
 	});
 	// channel.bind("bucket_updated" , function(data){
 	// 	console.log("Update Bucket Notified");
